@@ -16,8 +16,8 @@ export const useLogin = () => {
     isSignup: boolean
   ) => {
     let url = isSignup
-      ? "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAm77bPy2Cvsem0Piqv7SvNKP34CKsUA0s"
-      : "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAm77bPy2Cvsem0Piqv7SvNKP34CKsUA0s";
+      ? "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[I've made this misttake before!!]"
+      : "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[This is here temportity while I establish the server side]";
 
     setLoading(true);
 
