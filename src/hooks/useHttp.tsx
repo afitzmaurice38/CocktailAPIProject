@@ -12,7 +12,6 @@ const httpReducer = (curHttpState = initialState, action: any) => {
         loading: true,
         error: null,
         data: null,
-        extra: null,
       };
     case "RESPONSE":
       return {
@@ -42,6 +41,7 @@ const useHttp = () => {
         return response.json();
       })
       .then((responseData) => {
+        console.log(responseData);
         dispatchHTTP({
           type: "RESPONSE",
           responseData: responseData,
@@ -56,8 +56,8 @@ const useHttp = () => {
     isLoading: httpState.loading,
     data: httpState.data,
     error: httpState.error,
-    sendRequest: sendRequest,
-    clear: clear,
+    sendRequest,
+    clear,
   };
 };
 

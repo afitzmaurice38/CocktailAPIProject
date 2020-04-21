@@ -161,16 +161,18 @@ button {
 }
 
 #header form {
-  margin: 0.5em 0 0.5em 0;
+  width: 50%;
 }
 
 #header form input {
-  width: 800px;
+  width: 80%;
   height: 60px;
   border: none;
   border-radius: 5px 0 0 5px;
+  position: relative;
 }
 #header form button {
+  width: 20%;
   height: 60px;
   border: none;
   transform: translateY(1px);
@@ -196,6 +198,23 @@ button {
   font-size: 1.5em;
   line-height: 1.5em;
   margin: 0.25em 0 0 0;
+}
+
+/* Search Results */
+.inputWrapper {
+  width: 100%;
+  position: relative;
+}
+.results {
+  position: absolute;
+  width: 80%;
+  background: rgba(51, 51, 51, 0.9);
+  border-radius: 0 0 5px 5px;
+}
+
+.formContainer {
+  display: flex;
+  justify-content: center;
 }
 
 /* You over 21? Join the social */

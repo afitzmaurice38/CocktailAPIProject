@@ -1,16 +1,59 @@
-import React, { FormEvent, useContext, useRef } from "react";
+import React, { FormEvent, useEffect, useState, useRef } from "react";
+import useHttp from "./hooks/useHttp";
 import Drink from "./components/UI/SVG/WhiskeyIcon";
 import { RouteComponentProps } from "@reach/router";
-import { AuthContext } from "./AuthContext";
+import SearchInputResult from "./components/searchInputResult/searchInputResult";
 
 const Landing = (props: RouteComponentProps) => {
-  const { user, sendRequest } = useContext(AuthContext);
-  const searchInput = useRef<HTMLInputElement>(null);
+  const [enteredSearch, setEnteredSearch] = useState("");
+  const { sendRequest, data, isLoading, error, clear } = useHttp();
+  const [displayData, setDisplayData] = useState([]);
 
   const onSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(searchInput.current!.value);
+    console.log(enteredSearch, displayData);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (enteredSearch !== "") {
+        sendRequest(
+          `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURI(
+            enteredSearch
+          )}`
+        );
+      } else {
+        clear();
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [enteredSearch]);
+
+  useEffect(() => {
+    const updateData =
+      data && data.drinks !== null
+        ? data.drinks.slice(0, 10) || [...data.drinks]
+        : null;
+    setDisplayData(updateData);
+  }, [data]);
+
+  let showResults;
+  if (displayData && displayData.length) {
+    showResults = displayData.map(function results(result: any) {
+      return (
+        <SearchInputResult
+          key={result.strDrink}
+          name={result.strDrink}
+          type={result.strCategory}
+          picLink={result.strDrinkThumb}
+        />
+      ); //<h1 key={result.strDrink}>{result.strDrink}</h1>
+    });
+  }
+
   return (
     <div>
       <div id="header">
@@ -18,14 +61,24 @@ const Landing = (props: RouteComponentProps) => {
           <Drink />
         </span>
         <h1>The Bored Bartender</h1>
-        <form onSubmit={(e) => onSubmitHandler(e)}>
-          <input placeholder="What'll it be?" name="search" ref={searchInput} />
-          <button type="submit">
-            <span className="btnText">Bottoms Up!</span>
-          </button>
-        </form>
+        <div className="formContainer">
+          <form onSubmit={(e) => onSubmitHandler(e)}>
+            <div className="inputWrapper">
+              <input
+                placeholder="What'll it be?"
+                name="search"
+                autoComplete="off"
+                onChange={(e) => setEnteredSearch(e.target.value)}
+              />
+              <button type="submit">
+                <span className="btnText">Bottoms Up!</span>
+              </button>
+              <div className="results">{showResults}</div>
+            </div>
+          </form>
+        </div>
         <p style={{ paddingBottom: "0", marginBottom: "0" }}>
-          Search for sexy, damn good drinks that{" "}
+          Search for damn good drinks that{" "}
         </p>
         <p style={{ paddingTop: "0", marginTop: "0" }}>
           ...you can make at home right now!
@@ -41,4 +94,4 @@ const Landing = (props: RouteComponentProps) => {
   );
 };
 
-export default Landing;
+export default Landing; //<div className="results">{showResults}</div>
